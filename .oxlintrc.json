@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn",
+    "restriction": "off",
+    "pedantic": "off",
+    "style": "off",
+    "nursery": "off"
+  },
+  "rules": {
+    "no-bitwise": "off",
+    "no-control-regex": "off",
+    "unicorn/no-null": "off"
+  },
+  "ignorePatterns": ["dist", "node_modules", "coverage"]
+}
