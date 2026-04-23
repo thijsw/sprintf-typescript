@@ -112,9 +112,15 @@ parts literal.
 
 ## Credits
 
-This package is a from-scratch reimplementation. Prior art: the original
-[`sprintf-js`](https://github.com/alexei/sprintf.js) by Alexandru Mărășteanu,
-which defined the API.
+`sprintf` itself is a POSIX/C standard library function, and most of the
+format grammar here (specifiers, flags, width, precision, `%n$` positional
+arguments) comes from C. The `%(name)s` named-argument syntax follows
+Python's convention.
+
+This package is a from-scratch reimplementation that aims to be a drop-in
+replacement for [`sprintf-js`](https://github.com/alexei/sprintf.js) by
+Alexandru Mărășteanu — matching its JS-specific extensions (`%j`, `%T`,
+`%v`, `%t`) and coercion semantics.
 
 ## License
 

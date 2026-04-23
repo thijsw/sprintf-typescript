@@ -5,7 +5,7 @@
  * import { sprintf, vsprintf } from 'sprintf-typescript';
  * ```
  */
-export { sprintf, vsprintf } from './sprintf.js';
+export { sprintf, vsprintf } from './sprintf.js'
 
 export type {
   Token,
@@ -20,7 +20,7 @@ export type {
   PathSegment,
   PathKeySegment,
   PathIndexSegment,
-} from './tokens.js';
+} from './tokens.js'
 
 export type {
   ParseFormat,
@@ -33,4 +33,4 @@ export type {
   ArgsOf,
   FormatResult,
   TypeForSpec,
-} from './types/index.js';
+} from './types/index.js'

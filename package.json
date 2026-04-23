@@ -35,26 +35,30 @@
   "author": "Thijs Wijnmaalen <thijs@wijnmaalen.name>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thijswijnmaalen/sprintf-typescript.git"
+    "url": "git+https://github.com/thijsw/sprintf-typescript.git"
   },
   "bugs": {
-    "url": "https://github.com/thijswijnmaalen/sprintf-typescript/issues"
+    "url": "https://github.com/thijsw/sprintf-typescript/issues"
   },
-  "homepage": "https://github.com/thijswijnmaalen/sprintf-typescript#readme",
+  "homepage": "https://github.com/thijsw/sprintf-typescript#readme",
   "scripts": {
     "build": "vite build && tsc -p tsconfig.build.json",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:types": "vitest run --typecheck",
     "lint": "oxlint src test",
+    "format": "prettier --write src test",
+    "format:check": "prettier --check src test",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run lint && npm run typecheck && npm test && npm run build"
+    "prepublishOnly": "npm run lint && npm run format:check && npm run typecheck && npm test && npm run build"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
     "oxlint": "^1.61.0",
+    "prettier": "^3.8.3",
     "typescript": "^6.0.3",
     "vite": "^8.0.9",
     "vitest": "^4.1.5"
-  }
+  },
+  "packageManager": "pnpm@10.33.2+sha512.a90faf6feeab71ad6c6e57f94e0fe1a12f5dcc22cd754db40ae9593eb6a3e0b6b12e3540218bb37ae083404b1f2ce6db2a4121e979829b4aff94b99f49da1cf8"
 }

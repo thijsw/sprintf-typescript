@@ -18,4 +18,4 @@ export type TypeForSpec<S extends string> = S extends
   ? number
   : S extends 's' | 'j' | 't' | 'T' | 'v'
     ? unknown
-    : never;
+    : never

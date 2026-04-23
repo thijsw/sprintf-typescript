@@ -1,4 +1,4 @@
-import type { FormatToken, PlaceholderT } from './parse.js';
+import type { FormatToken, PlaceholderT } from './parse.js'
 
 /**
  * Derives the most specific return type possible for a given parsed format
@@ -19,40 +19,42 @@ import type { FormatToken, PlaceholderT } from './parse.js';
 export type FormatResult<
   Tokens extends readonly FormatToken[],
   Args extends readonly unknown[],
-> = HasUnparseable<Tokens> extends true
-  ? string
-  : IsAllNamed<Tokens> extends true
-    ? RenderNamed<Tokens, ReadArgZero<Args>>
-    : IsAllPositional<Tokens> extends true
-      ? RenderPositional<Tokens, Args>
-      : string;
+> =
+  HasUnparseable<Tokens> extends true
+    ? string
+    : IsAllNamed<Tokens> extends true
+      ? RenderNamed<Tokens, ReadArgZero<Args>>
+      : IsAllPositional<Tokens> extends true
+        ? RenderPositional<Tokens, Args>
+        : string
 
-type ReadArgZero<Args extends readonly unknown[]> = Args extends readonly [infer H, ...unknown[]]
+type ReadArgZero<Args extends readonly unknown[]> = Args extends readonly [
+  infer H,
+  ...unknown[],
+]
   ? H
-  : unknown;
+  : unknown
 
 // --- Classification helpers --------------------------------------------------
 
-type HasUnparseable<Tokens extends readonly FormatToken[]> = Tokens extends readonly [
-  infer H,
-  ...infer R extends readonly FormatToken[],
-]
-  ? H extends { kind: 'unknown' }
-    ? true
-    : HasUnparseable<R>
-  : false;
+type HasUnparseable<Tokens extends readonly FormatToken[]> =
+  Tokens extends readonly [infer H, ...infer R extends readonly FormatToken[]]
+    ? H extends { kind: 'unknown' }
+      ? true
+      : HasUnparseable<R>
+    : false
 
-type IsAllNamed<Tokens extends readonly FormatToken[]> = HasAnyRef<Tokens, 'named'> extends true
-  ? HasAnyRef<Tokens, 'implicit'> extends true
-    ? false
-    : HasAnyRef<Tokens, 'explicit'> extends true
+type IsAllNamed<Tokens extends readonly FormatToken[]> =
+  HasAnyRef<Tokens, 'named'> extends true
+    ? HasAnyRef<Tokens, 'implicit'> extends true
       ? false
-      : true
-  : false;
+      : HasAnyRef<Tokens, 'explicit'> extends true
+        ? false
+        : true
+    : false
 
-type IsAllPositional<Tokens extends readonly FormatToken[]> = HasAnyRef<Tokens, 'named'> extends true
-  ? false
-  : true;
+type IsAllPositional<Tokens extends readonly FormatToken[]> =
+  HasAnyRef<Tokens, 'named'> extends true ? false : true
 
 type HasAnyRef<
   Tokens extends readonly FormatToken[],
@@ -63,7 +65,7 @@ type HasAnyRef<
       ? true
       : HasAnyRef<R, Kind>
     : HasAnyRef<R, Kind>
-  : false;
+  : false
 
 // --- Positional rendering ----------------------------------------------------
 
@@ -92,17 +94,23 @@ type RenderPositional<
             >
           : `${Acc}${string}`
       : Acc
-  : Acc;
+  : Acc
 
-type IndexArg<Args extends readonly unknown[], I extends number> = I extends keyof Args
-  ? Args[I]
-  : unknown;
+type IndexArg<
+  Args extends readonly unknown[],
+  I extends number,
+> = I extends keyof Args ? Args[I] : unknown
 
-type Minus1<S extends string> = S extends `${infer N extends number}` ? Sub1<N> : 0;
+type Minus1<S extends string> = S extends `${infer N extends number}`
+  ? Sub1<N>
+  : 0
 
-type Sub1<N extends number, C extends readonly unknown[] = []> = [unknown, ...C]['length'] extends N
+type Sub1<N extends number, C extends readonly unknown[] = []> = [
+  unknown,
+  ...C,
+]['length'] extends N
   ? C['length']
-  : Sub1<N, [unknown, ...C]>;
+  : Sub1<N, [unknown, ...C]>
 
 // --- Named rendering --------------------------------------------------------
 
@@ -115,18 +123,28 @@ type RenderNamed<
     ? RenderNamed<R, Obj, `${Acc}${Text}`>
     : H extends PlaceholderT
       ? H['ref'] extends { kind: 'named'; path: infer P extends string }
-        ? RenderNamed<R, Obj, `${Acc}${AsTemplatePart<Substitute<H, ResolvePath<P, Obj>>>}`>
+        ? RenderNamed<
+            R,
+            Obj,
+            `${Acc}${AsTemplatePart<Substitute<H, ResolvePath<P, Obj>>>}`
+          >
         : `${Acc}${string}`
       : Acc
-  : Acc;
+  : Acc
 
-type ResolvePath<P extends string, Obj> = WalkPath<SplitPath<NormalizePath<P>>, Obj>;
+type ResolvePath<P extends string, Obj> = WalkPath<
+  SplitPath<NormalizePath<P>>,
+  Obj
+>
 
-type NormalizePath<P extends string> = P extends `${infer A}[${infer N}]${infer B}`
-  ? NormalizePath<`${A}.${N}${B}`>
-  : P;
+type NormalizePath<P extends string> =
+  P extends `${infer A}[${infer N}]${infer B}`
+    ? NormalizePath<`${A}.${N}${B}`>
+    : P
 
-type SplitPath<S extends string> = S extends `${infer A}.${infer B}` ? [A, ...SplitPath<B>] : [S];
+type SplitPath<S extends string> = S extends `${infer A}.${infer B}`
+  ? [A, ...SplitPath<B>]
+  : [S]
 
 type WalkPath<Segs extends readonly string[], Obj> = Segs extends readonly [
   infer H extends string,
@@ -141,7 +159,7 @@ type WalkPath<Segs extends readonly string[], Obj> = Segs extends readonly [
     : H extends keyof Obj
       ? WalkPath<R, Obj[H]>
       : unknown
-  : Obj;
+  : Obj
 
 // --- Per-placeholder substitution -------------------------------------------
 
@@ -152,13 +170,13 @@ type Substitute<Ph extends PlaceholderT, Arg> = Ph['modified'] extends true
     ? StringifyForS<Arg>
     : Ph['spec'] extends 'd' | 'i'
       ? StringifyInt<Arg>
-      : string;
+      : string
 
 type StringifyForS<Arg> = [Arg] extends [never]
   ? string
   : Arg extends string | number | bigint | boolean | null | undefined
     ? `${Arg}`
-    : string;
+    : string
 
 type StringifyInt<Arg> = Arg extends bigint
   ? `${Arg}`
@@ -166,7 +184,7 @@ type StringifyInt<Arg> = Arg extends bigint
     ? IsIntegerLiteral<Arg> extends true
       ? `${Arg}`
       : string
-    : string;
+    : string
 
 /** True for a finite integer literal type, false for generic `number` or a float. */
 type IsIntegerLiteral<N extends number> = number extends N
@@ -175,13 +193,19 @@ type IsIntegerLiteral<N extends number> = number extends N
     ? false
     : `${N}` extends `${string}e${string}` | `${string}E${string}`
       ? false
-      : true;
+      : true
 
 /**
  * Guards against substituted fragments that aren't valid in a template
  * literal (defensive — `Substitute` already narrows to `string`, but this
  * keeps the public signature composable).
  */
-type AsTemplatePart<T> = T extends string | number | bigint | boolean | null | undefined
+type AsTemplatePart<T> = T extends
+  | string
+  | number
+  | bigint
+  | boolean
+  | null
+  | undefined
   ? T
-  : string;
+  : string
