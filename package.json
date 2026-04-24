@@ -1,6 +1,6 @@
 {
   "name": "sprintf-typescript",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Modern TypeScript sprintf/vsprintf. Drop-in replacement for sprintf-js with template-literal-typed format strings.",
   "type": "module",
   "engines": {
